@@ -7,37 +7,55 @@ library(SuppDists)
 # The one that seems to be correct using 'Univariate Discrete Distributions'
 # 6.2.3
 
-# Figure 1 (left)
+# Figure 1 (left), Wang
 x <- 0:15
 alpha <- 10
-beta <- 5
+bet <- 5
 rs <- c(1, 5, 10)
 plot(x, rep(1, length(x)), type = 'n', xlim = c(0, max(x)), ylim = c(0, 0.8),
      ylab = "Probability")
 for (r in rs) {
-    points(x, dghyper(x, -r, -beta, alpha - 1))
-    lines(x, dghyper(x, -r, -beta, alpha - 1))
+    points(x, dghyper(x, -r, -bet, alpha - 1))
+    lines(x, dghyper(x, -r, -bet, alpha - 1))
 }
 
 # Figure 1 (right)
+x <- 0:15
 alphas <- c(10, 20, 50)
-beta <- 10
+bet <- 10
 r <- 5
 plot(x, rep(1, length(x)), type = 'n', xlim = c(0, max(x)), ylim = c(0, 0.8),
      ylab = "Probability")
-for (alph in alpha) {
-    points(x, dghyper(x, -r, -beta, alph - 1))
-    lines(x, dghyper(x, -r, -beta, alph - 1))
+for (alph in alphas) {
+    points(x, dghyper(x, -r, -bet, alph - 1))
+    lines(x, dghyper(x, -r, -bet, alph - 1))
 }
 
 # Figure 2, Wang
 x <- 0:50
 r <- 15
 alpha <- 10
-beta <- 9
+bet <- 9
 plot(x, rep(1, length(x)), type = 'n', xlim = c(0, max(x)), ylim = c(0, 0.08),
      ylab = "Probability")
-points(x, dghyper(x, -r, -beta, alpha - 1))
-lines(x, dghyper(x, -r, -beta, alpha - 1))
+points(x, dghyper(x, -r, -bet, alpha - 1))
+lines(x, dghyper(x, -r, -bet, alpha - 1))
 points(x, dnbinom(x, r, 0.5))
 lines(x, dnbinom(x, r, 0.5))
+
+# Verifying the two PDFs are equal.
+dbnb <- function(x, r, a, b) {
+    (gamma(x + r) * beta(r + a, x + b) ) /
+        ( gamma(r) * gamma(x + 1) * beta(a, b) )
+}
+
+x <- 0:15
+alpha <- 10
+bet <- 5
+rs <- c(1, 5, 10)
+plot(x, rep(1, length(x)), type = 'n', xlim = c(0, max(x)), ylim = c(0, 0.8),
+     ylab = "Probability")
+for (r in rs) {
+    points(x, dbnb(x, r, alpha, bet))
+    lines(x, dbnb(x, r, alpha, bet))
+}
